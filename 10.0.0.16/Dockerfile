@@ -13,6 +13,10 @@ MAINTAINER Rodrigo Tsuru caixapostal@gmail.com
 LABEL "ProductID"="447aefb5fd1342d5b893f3934dfded73" \
       "ProductName"="IBM Integration Bus" \
       "ProductVersion"="10.0.0.16"
+
+# Create user to run as
+RUN groupadd -og 0 mqbrkrs && \
+    useradd --create-home --home-dir /home/iibuser -u 1001 -G mqbrkrs iibuser
   
 # Install IIB V10 Developer edition
 RUN mkdir /opt/ibm && \
@@ -25,10 +29,6 @@ COPY kernel_settings.sh /tmp/
 RUN chmod +x /tmp/kernel_settings.sh;sync && \
     /tmp/kernel_settings.sh
 
-
-# Create user to run as
-RUN groupmod -og 0 mqbrkrs && \
-    useradd --create-home --home-dir /home/iibuser -u 1001 -G mqbrkrs iibuser
 
 # Copy in script files
 COPY iib_manage.sh /usr/local/bin/
