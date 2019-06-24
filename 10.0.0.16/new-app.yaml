@@ -1,0 +1,87 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: iib-openshift
+    name: iib-openshift
+  spec:
+    replicas: 1
+    selector:
+      app: iib-openshift
+      deploymentconfig: iib-openshift
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: iib-openshift
+          deploymentconfig: iib-openshift
+      spec:
+        containers:
+        - env:
+          - name: LICENSE
+            value: accept
+          - name: NODENAME
+            value: NODE01
+          - name: SERVERNAME
+            value: SERVER01
+          image: rodrigotsuru/iib-openshift:latest
+          name: iib-openshift
+          ports:
+          - containerPort: 4414
+            protocol: TCP
+          - containerPort: 7800
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - iib-openshift
+        from:
+          kind: ImageStreamTag
+          name: iib-openshift:latest
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: iib-openshift
+    name: iib-openshift
+  spec:
+    ports:
+    - name: 4414-tcp
+      port: 4414
+      protocol: TCP
+      targetPort: 4414
+    - name: 7800-tcp
+      port: 7800
+      protocol: TCP
+      targetPort: 7800
+    selector:
+      app: iib-openshift
+      deploymentconfig: iib-openshift
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

@@ -19,5 +19,5 @@
  echo "net.core.netdev_max_backlog = 3000" >> /etc/sysctl.conf
  echo "net.core.somaxconn = 3000" >> /etc/sysctl.conf
 
- echo "iibuser hard nofile 8192" >> /etc/security/limits.conf
- echo "iibuser soft nofile 8192" >> /etc/security/limits.conf
+ echo "@mqbrkrs hard nofile 8192" >> /etc/security/limits.conf
+ echo "@mqbrkrs soft nofile 8192" >> /etc/security/limits.conf

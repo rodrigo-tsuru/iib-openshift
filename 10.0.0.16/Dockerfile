@@ -8,7 +8,7 @@
 #FROM rhel:rhel7
 FROM registry.access.redhat.com/rhel7/rhel
 
-MAINTAINER Sam Rogers srogers@uk.ibm.com
+MAINTAINER Rodrigo Tsuru caixapostal@gmail.com
 
 LABEL "ProductID"="447aefb5fd1342d5b893f3934dfded73" \
       "ProductName"="IBM Integration Bus" \
@@ -22,15 +22,13 @@ RUN mkdir /opt/ibm && \
 
 # Configure system
 COPY kernel_settings.sh /tmp/
-#RUN echo "IIB_10:" > /etc/debian_chroot  && \
-#    touch /var/log/syslog && \
-#    chown syslog:adm /var/log/syslog && \
 RUN chmod +x /tmp/kernel_settings.sh;sync && \
     /tmp/kernel_settings.sh
 
 
 # Create user to run as
-RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs iibuser
+RUN groupmod -og 0 mqbrkrs && \
+    useradd --create-home --home-dir /home/iibuser -G mqbrkrs iibuser
 
 # Copy in script files
 COPY iib_manage.sh /usr/local/bin/
@@ -44,8 +42,6 @@ ENV MQSI_MQTT_LOCAL_HOSTNAME=127.0.0.1
 
 # Expose default admin port and http port
 EXPOSE 4414 7800
-
-USER iibuser
 
 # Set entrypoint to run management script
 ENTRYPOINT ["iib_manage.sh"]
