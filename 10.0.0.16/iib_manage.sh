@@ -24,6 +24,12 @@ start()
         /opt/ibm/iib-10.0.0.16/iib version
 	echo "----------------------------------------"
 
+	if ! whoami &> /dev/null; then
+  		if [ -w /etc/passwd ]; then
+    			echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd
+  		fi
+	fi
+
         NODE_EXISTS=`mqsilist | grep $NODE_NAME > /dev/null ; echo $?`
 
 
